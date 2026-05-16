@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>破壁：暗影博弈 — 毛概理论抢答桌游</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ====== 标题画面 ====== -->
+<div id="screen-title" class="screen active">
+  <div class="title-container">
+    <div class="emblem">★</div>
+    <h1>破壁：暗影博弈</h1>
+    <p class="subtitle">毛概理论桌游 · 主持人抢答制 · 1v2 非对称博弈</p>
+    <div class="title-themes"><span>实事求是</span><span>群众路线</span><span>独立自主</span></div>
+    <p class="title-flavor">科技霸权封锁下，研发团队能否突破核心技术？<br>角色随机分配 · 120道毛概题库 · 三轮抢答夺取行动点</p>
+    <div class="title-buttons">
+      <button id="btn-start" class="btn-primary">开始游戏</button>
+      <button id="btn-rules" class="btn-secondary">游戏规则</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 规则画面 ====== -->
+<div id="screen-rules" class="screen">
+  <div class="rules-container">
+    <h2>游戏规则</h2>
+    <div class="rules-content">
+      <h3>背景与胜负</h3>
+      <p>科研双核团队由专家和领袖组成，在黑客狙击下推进三项核心能力。结算时先看是否有任意属性大于10点；若有，正方立刻胜利。若没有正方胜利，再看是否有任意属性小于0点；若有，黑客胜利。</p>
+      <h3>三大属性</h3>
+      <ul>
+        <li><strong>实事求是：</strong>代表数据、事实判断、底层逻辑与路线校准。</li>
+        <li><strong>群众路线：</strong>代表开源生态、人才协作、用户反馈与组织动员。</li>
+        <li><strong>独立自主：</strong>代表核心专利、供应链安全、自研能力与战略定力。</li>
+      </ul>
+      <h3>角色职责</h3>
+      <ul>
+        <li><strong>专家：</strong>基础推进0点，每回合必须选择一个防御属性；黑客本回合打到该属性的伤害无效。</li>
+        <li><strong>领袖：</strong>基础推进2点，负责稳定推进关键属性。</li>
+        <li><strong>黑客：</strong>基础伤害3点，行动前可窥探一个属性的最新具体数值；单个属性最多投入3点伤害。</li>
+      </ul>
+      <h3>回合流程</h3>
+      <ol>
+        <li><strong>秘密布署：</strong>正方A、正方B各自秘密分配5点初始能量。两人的分配相加，成为三项属性的初始值。</li>
+        <li><strong>抢答：</strong>每回合3题。主持人读题并展示答案，谁答对就点击专家、领袖或黑客按钮，对应角色获得1点本回合奖励。</li>
+        <li><strong>公开谈判：</strong>专家、领袖、黑客三人共同谈判30秒。三名选手都看不到具体点数，也不知道状态对应哪个属性；主持人只透露“几个危机、几个正常、几个临门”这类状态数量。</li>
+        <li><strong>专家行动：</strong>专家分配自己的推进点，并选择一个防御属性。确认后推进立即生效。</li>
+        <li><strong>领袖行动：</strong>领袖分配自己的推进点。确认后推进立即生效。</li>
+        <li><strong>黑客行动：</strong>黑客先窥探一个属性，此时看到的是专家和领袖推进后的最新数值；随后分配伤害。</li>
+        <li><strong>亮牌结算：</strong>展示本回合所有推进和伤害，应用黑客伤害后判定胜负。</li>
+      </ol>
+      <h3>点数机制</h3>
+      <ul>
+        <li>专家本回合推进点 = 0基础推进 + 专家抢答奖励。</li>
+        <li>领袖本回合推进点 = 2基础推进 + 领袖抢答奖励。</li>
+        <li>黑客本回合伤害点 = 3基础伤害 + 黑客抢答奖励。</li>
+        <li>专家和领袖各自获得的抢答奖励只给自己使用，不共享。</li>
+        <li>属性不会在行动中被限制到0到10之间；结算时直接用大于10、小于0判断胜负。</li>
+      </ul>
+      <h3>主持人说明</h3>
+      <p>电脑在主持人处。具体点数只有主持人能看到。抢答和谈判时，主持人只公开状态数量，不公开属性名称和具体数值。行动时只让当前选手到屏幕前操作，其他人回避；黑客窥探前要确保专家和领袖都已经完成确认。</p>
+    </div>
+    <button id="btn-rules-back" class="btn-secondary">返回</button>
+  </div>
+</div>
+
+<!-- ====== 秘密布署 - 正方A ====== -->
+<div id="screen-setup-A" class="screen">
+  <div class="setup-container">
+    <h2>秘密布署 — <span class="player-tag hero">正方A（<span id="setup-A-char">---</span>）</span></h2>
+    <p class="hint">请将 <strong>5 点初始能量</strong> 分配到三个属性上（其他人请回避）。</p>
+    <div class="alloc-grid">
+      <div class="alloc-row"><div class="alloc-label truth">实事求是</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="alloc-A-truth">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row"><div class="alloc-label mass">群众路线</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="alloc-A-mass">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row"><div class="alloc-label indep">独立自主</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="alloc-A-indep">0</span><button class="alloc-btn plus">+</button></div>
+    </div>
+    <p class="remaining">剩余点数：<strong id="alloc-A-remain">5</strong></p>
+    <button id="btn-setup-A-confirm" class="btn-primary" disabled>确认，交给正方B</button>
+  </div>
+</div>
+
+<!-- ====== 秘密布署 - 正方B ====== -->
+<div id="screen-setup-B" class="screen">
+  <div class="setup-container">
+    <h2>秘密布署 — <span class="player-tag hero">正方B（<span id="setup-B-char">---</span>）</span></h2>
+    <p class="hint">请将 <strong>5 点初始能量</strong> 分配到三个属性上（其他人请回避）。</p>
+    <div class="alloc-grid">
+      <div class="alloc-row"><div class="alloc-label truth">实事求是</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="alloc-B-truth">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row"><div class="alloc-label mass">群众路线</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="alloc-B-mass">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row"><div class="alloc-label indep">独立自主</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="alloc-B-indep">0</span><button class="alloc-btn plus">+</button></div>
+    </div>
+    <p class="remaining">剩余点数：<strong id="alloc-B-remain">5</strong></p>
+    <button id="btn-setup-B-confirm" class="btn-primary" disabled>确认，开始游戏</button>
+  </div>
+</div>
+
+<!-- ====== 抢答环节（主持人主导） ====== -->
+<div id="screen-buzzer" class="screen">
+  <div class="buzzer-container">
+    <div class="round-badge">第 <span id="buzzer-round">1</span> 回合</div>
+    <h2>⚡ 抢答环节 — 主持人操作</h2>
+    <div class="buzzer-qnum" id="buzzer-qnum">1/3 · 单选</div>
+    <div class="buzzer-scoreboard">
+      <span>专家：<strong id="buzzer-expert-bonus" style="color:#4ecdc4;">0</strong></span>
+      <span>领袖：<strong id="buzzer-leader-bonus" style="color:#45aaf2;">0</strong></span>
+      <span>黑客：<strong id="buzzer-hacker-bonus" style="color:#fc5c65;">0</strong></span>
+    </div>
+    <div id="buzzer-body">
+      <div class="buzzer-q" id="buzzer-q"></div>
+      <div class="buzzer-opts" id="buzzer-opts"></div>
+      <div class="buzzer-answer-box" id="buzzer-answer"></div>
+      <div class="buzzer-result" id="buzzer-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 公开谈判 ====== -->
+<div id="screen-negotiation" class="screen">
+  <div class="nego-container">
+    <div class="round-badge">第 <span id="round-num">1</span> 回合</div>
+    <h2>公开谈判阶段</h2>
+    <p class="hint">三人共同谈判。精确点数仅供主持人查看和控制节奏。</p>
+    <p class="hint">状态口径：小于3为危机，3-7为正常，大于7为临门。</p>
+    <div class="energy-bars-public">
+      <div class="energy-bar-row"><span class="bar-label truth">实事求是</span><div class="bar-track"><div class="bar-fill truth" id="bar-truth-public"></div></div><span class="bar-val" id="val-truth-public">0</span></div>
+      <div class="energy-bar-row"><span class="bar-label mass">群众路线</span><div class="bar-track"><div class="bar-fill mass" id="bar-mass-public"></div></div><span class="bar-val" id="val-mass-public">0</span></div>
+      <div class="energy-bar-row"><span class="bar-label indep">独立自主</span><div class="bar-track"><div class="bar-fill indep" id="bar-indep-public"></div></div><span class="bar-val" id="val-indep-public">0</span></div>
+    </div>
+    <div class="timer-ring" id="timer-ring">
+      <svg viewBox="0 0 120 120"><circle class="timer-track" cx="60" cy="60" r="52"/><circle class="timer-progress" cx="60" cy="60" r="52" id="timer-circle"/></svg>
+      <span class="timer-text" id="timer-text">30</span>
+    </div>
+    <p class="timer-hint">谈判剩余时间</p>
+    <button id="btn-nego-end" class="btn-primary">提前结束谈判</button>
+  </div>
+</div>
+
+<!-- ====== 属性推进 - 正方A ====== -->
+<div id="screen-play-A" class="screen">
+  <div class="play-container">
+    <div class="round-badge">第 <span id="play-A-round">1</span> 回合</div>
+    <h2>属性推进 — <span class="player-tag hero">正方A（<span id="play-A-char">---</span>）</span></h2>
+    <p class="hint">基础 <strong id="play-A-base">0</strong><span id="play-A-bonus" style="color:#4ecdc4;"></span> = <strong id="play-A-total">0</strong> 点（选手到屏幕前操作）</p>
+    <div class="alloc-grid">
+      <div class="alloc-row play-alloc-row truth"><div class="alloc-label truth">实事求是</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="push-A-truth">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row play-alloc-row mass"><div class="alloc-label mass">群众路线</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="push-A-mass">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row play-alloc-row indep"><div class="alloc-label indep">独立自主</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="push-A-indep">0</span><button class="alloc-btn plus">+</button></div>
+    </div>
+    <p class="remaining">剩余：<strong id="push-A-remain">0</strong></p>
+    <div class="defense-group" id="defense-group-A" style="display:none;">
+      <p class="hint" style="color:#4ecdc4;">🛡️ 防火墙防御：选择一个属性，黑客本回合对其伤害全部无效</p>
+      <div class="defense-btns">
+        <button class="btn-defense-sm" data-attr="truth">实事求是</button>
+        <button class="btn-defense-sm" data-attr="mass">群众路线</button>
+        <button class="btn-defense-sm" data-attr="indep">独立自主</button>
+      </div>
+    </div>
+    <button id="btn-play-A-confirm" class="btn-primary" disabled>确认，交给正方B</button>
+  </div>
+</div>
+
+<!-- ====== 属性推进 - 正方B ====== -->
+<div id="screen-play-B" class="screen">
+  <div class="play-container">
+    <div class="round-badge">第 <span id="play-B-round">1</span> 回合</div>
+    <h2>属性推进 — <span class="player-tag hero">正方B（<span id="play-B-char">---</span>）</span></h2>
+    <p class="hint">基础 <strong id="play-B-base">2</strong><span id="play-B-bonus" style="color:#4ecdc4;"></span> = <strong id="play-B-total">2</strong> 点（选手到屏幕前操作）</p>
+    <div class="alloc-grid">
+      <div class="alloc-row play-alloc-row truth"><div class="alloc-label truth">实事求是</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="push-B-truth">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row play-alloc-row mass"><div class="alloc-label mass">群众路线</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="push-B-mass">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row play-alloc-row indep"><div class="alloc-label indep">独立自主</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="push-B-indep">0</span><button class="alloc-btn plus">+</button></div>
+    </div>
+    <p class="remaining">剩余：<strong id="push-B-remain">2</strong></p>
+    <div class="defense-group" id="defense-group-B" style="display:none;">
+      <p class="hint" style="color:#4ecdc4;">🛡️ 防火墙防御：选择一个属性，黑客本回合对其伤害全部无效</p>
+      <div class="defense-btns">
+        <button class="btn-defense-sm" data-attr="truth">实事求是</button>
+        <button class="btn-defense-sm" data-attr="mass">群众路线</button>
+        <button class="btn-defense-sm" data-attr="indep">独立自主</button>
+      </div>
+    </div>
+    <button id="btn-play-B-confirm" class="btn-primary" disabled>确认，交给黑客</button>
+  </div>
+</div>
+
+<!-- ====== 制裁打击 + 窥探（黑客） ====== -->
+<div id="screen-play-V" class="screen">
+  <div class="play-container villain">
+    <div class="round-badge">第 <span id="play-V-round">1</span> 回合</div>
+    <h2>制裁打击 — <span class="player-tag villain-tag">黑客</span></h2>
+
+    <!-- 窥探：黑客每回合可查看一个属性的具体数值 -->
+    <div class="peek-inline">
+      <p style="color:#c084fc;font-size:0.8rem;margin-bottom:4px;">🔍 情报窥探：点击一个属性查看其具体数值（每回合一次）</p>
+      <div class="peek-btns-inline">
+        <button class="btn-peek-sm" id="peek-btn-truth">窥探 实事求是</button>
+        <button class="btn-peek-sm" id="peek-btn-mass">窥探 群众路线</button>
+        <button class="btn-peek-sm" id="peek-btn-indep">窥探 独立自主</button>
+      </div>
+      <div class="peek-result-inline" id="peek-result"></div>
+    </div>
+
+    <p class="hint">基础 <strong id="play-V-base">3</strong><span id="play-V-bonus" style="color:#fc5c65;"></span> = <strong id="play-V-total">3</strong> 点（单属性≤3，选手到屏幕前操作）</p>
+
+    <div class="alloc-grid">
+      <div class="alloc-row villain-alloc-row truth"><div class="alloc-label truth">实事求是</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="dmg-truth">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row villain-alloc-row mass"><div class="alloc-label mass">群众路线</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="dmg-mass">0</span><button class="alloc-btn plus">+</button></div>
+      <div class="alloc-row villain-alloc-row indep"><div class="alloc-label indep">独立自主</div><button class="alloc-btn minus">−</button><span class="alloc-val" id="dmg-indep">0</span><button class="alloc-btn plus">+</button></div>
+    </div>
+    <p class="remaining">剩余：<strong id="dmg-remain">3</strong></p>
+    <p class="hint warn" id="dmg-warn" style="display:none"></p>
+    <button id="btn-play-V-confirm" class="btn-primary" disabled>确认，进入结算</button>
+  </div>
+</div>
+
+<!-- ====== 亮牌结算 ====== -->
+<div id="screen-resolution" class="screen">
+  <div class="resolve-container">
+    <h2>亮牌结算</h2>
+    <div class="round-badge">第 <span id="resolve-round">1</span> 回合</div>
+    <div class="reveal-cards">
+      <div class="reveal-group hero-reveal"><h3>正方推进</h3><div class="reveal-card" id="reveal-card-A"></div><div class="reveal-card" id="reveal-card-B"></div></div>
+      <div class="reveal-group villain-reveal"><h3>黑客制裁</h3><div class="reveal-card" id="reveal-card-V"></div></div>
+    </div>
+    <div class="effect-summary" id="effect-summary"></div>
+    <div class="energy-bars-public">
+      <div class="energy-bar-row"><span class="bar-label truth">实事求是</span><div class="bar-track"><div class="bar-fill truth" id="bar-truth-resolve"></div></div><span class="bar-val" id="val-truth-resolve">0</span></div>
+      <div class="energy-bar-row"><span class="bar-label mass">群众路线</span><div class="bar-track"><div class="bar-fill mass" id="bar-mass-resolve"></div></div><span class="bar-val" id="val-mass-resolve">0</span></div>
+      <div class="energy-bar-row"><span class="bar-label indep">独立自主</span><div class="bar-track"><div class="bar-fill indep" id="bar-indep-resolve"></div></div><span class="bar-val" id="val-indep-resolve">0</span></div>
+    </div>
+    <div class="resolve-result" id="resolve-result"></div>
+    <button id="btn-next-round" class="btn-primary" style="display:none">进入下一回合</button>
+    <button id="btn-game-over" class="btn-primary" style="display:none">查看结果</button>
+  </div>
+</div>
+
+<!-- ====== 游戏结束 ====== -->
+<div id="screen-gameover" class="screen">
+  <div class="gameover-container">
+    <div class="gameover-emblem" id="gameover-emblem"></div>
+    <h2 id="gameover-title"></h2>
+    <p id="gameover-subtitle"></p>
+    <div class="gameover-theory" id="gameover-theory"></div>
+    <div class="gameover-stats" id="gameover-stats"></div>
+    <button id="btn-restart" class="btn-primary">再来一局</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
